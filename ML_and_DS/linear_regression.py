@@ -1,11 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-k = 0
-b = 0
-X = np.random.normal(50, 70, 10)
+
+X = np.random.normal(50, 70, 200)
 X -= np.min(X) - np.random.randint(0, 250)
-Y = X / 4 + np.random.normal(X, 15) + np.random.rand() % 200
+Y = X / 4 + np.random.normal(X, 50) + np.random.rand() % 200
 Y -= np.min(Y) - np.random.randint(0, 250)
 X = np.expand_dims(X, axis=1)
 Y = np.expand_dims(Y, axis=1)
@@ -18,6 +17,16 @@ X_testing = data_set[splt:, 0]
 Y_testing = data_set[splt:, 1]
 
 
+def get_k_b(X, Y):
+    k = ((X - np.mean(X)) * (Y - np.mean(Y))).sum() / ((X - np.mean(X))**2).sum()
+    b = np.mean(Y) - k * np.mean(X)
+    return k, b
+
+
+k, b = 0, 0
+k, b = get_k_b(X_training, Y_training)
+
+
 fig, ax = plt.subplots(1, 2, figsize=(8, 4))
 ax[0].scatter(X_training, Y_training)
 line1, = ax[0].plot(X_training, k * X_training + b, "r")
@@ -27,7 +36,7 @@ line2, = ax[1].plot(X_testing, k * X_testing + b, "r")
 ax[1].set_title("Testing data")
 plt.ion()
 plt.show()
-plt.pause(1)
+plt.pause(5)
 
 
 def mse_loss(X, Y, k, b):
@@ -68,23 +77,23 @@ def MSE_test_metrik():
     print("*" * 38)
 
 
-epochs = 100
+# epochs = 100
 
-print("-" * 38)
-for epoch in range(epochs):
-    print(f"k = {k}; b = {b}")
-    print(f"В {epoch} эпоху MSE_loss = {mse_loss(X_testing, Y_testing, k, b)}")
-    print("-" * 38)
-    k, b = learn(X_training, Y_training, k, b)
-    line1.set_ydata(k * X_training + b)
-    line2.set_ydata(k * X_testing + b)
-    plt.pause(0.001)
-
-
-MSE_test_metrik()
+# print("-" * 38)
+# for epoch in range(epochs):
+#     print(f"k = {k}; b = {b}")
+#     print(f"В {epoch} эпоху MSE_loss = {mse_loss(X_testing, Y_testing, k, b)}")
+#     print("-" * 38)
+#     k, b = learn(X_training, Y_training, k, b)
+#     line1.set_ydata(k * X_training + b)
+#     line2.set_ydata(k * X_testing + b)
+#     plt.pause(0.001)
 
 
-plt.pause(999999)
+# MSE_test_metrik()
+
+
+# plt.pause(999999)
     
 
 
