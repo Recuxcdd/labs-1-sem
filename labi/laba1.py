@@ -84,6 +84,9 @@ def four():
 
 
 one()
+print()
 two()
+print()
 three()
+print()
 four()
