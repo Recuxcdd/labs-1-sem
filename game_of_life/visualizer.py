@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap, BoundaryNorm
 import sys
 
 
@@ -10,7 +11,10 @@ class Visualizer:
         self.world = world
         self.simulation = simulation
         self.fig, self.ax = plt.subplots()
-        self.im = self.ax.imshow(world.grid, cmap='binary', interpolation='nearest')
+        colors = ['white', '#aaddaa', '#2288bb', '#ffaa66']
+        cmap = ListedColormap(colors)
+        norm = BoundaryNorm([0,1,2,3,4], cmap.N)
+        self.im = self.ax.imshow(world.grid, cmap=cmap, norm=norm, interpolation='nearest')
         
         self.fig.canvas.mpl_connect('close_event', self.on_close)
         self.fig.canvas.mpl_connect('button_press_event', self.on_button_click)
@@ -44,3 +48,6 @@ class Visualizer:
             self.simulation.toggle_pause()
         elif key == 'right':
             self.simulation.step_request = True
+        elif key == 'r':
+            self.simulation.reset_request = True
+            
