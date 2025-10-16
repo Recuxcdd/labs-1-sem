@@ -11,9 +11,9 @@ class World:
         self.size_x = size_x
         self.size_y = size_y
         if random_init:
-            self.grid = np.random.randint(0, 2, (size_x, size_y), dtype=np.int8)
+            self.grid = np.random.randint(0, 2, (size_y, size_x), dtype=np.int8)
         else:
-            self.grid = np.zeros((size_x, size_y), dtype=np.int8)
+            self.grid = np.zeros((size_y, size_x), dtype=np.int8)
             
     
     def get_neighbours(self) -> np.ndarray:
@@ -36,7 +36,7 @@ class World:
         
         
     def toggle_cell(self, x: int, y: int):
-        self.grid[x, y] = 1 - self.grid[x, y]
+        self.grid[y, x] = 1 - self.grid[y, x]
 
 
 
@@ -48,7 +48,8 @@ class Visualizer:
         self.im = self.ax.imshow(world.grid, cmap='binary', interpolation='nearest')
         self.fig.canvas.mpl_connect('close_event', self.on_close)
         self.fig.canvas.mpl_connect('button_press_event', self.on_button_click)
-    
+        self.fig.canvas.mpl_connect('key_press_event', self.on_key_click)
+        
     
     def draw(self, delay):
         self.im.set_data(self.world.grid)
@@ -63,6 +64,15 @@ class Visualizer:
     
     
     def on_button_click(self, event):
+        if hasattr(event, 'inaxes') and event.inaxes is not None:
+            x = round(event.xdata)
+            y = round(event.ydata)
+            self.world.toggle_cell(x, y)
+            self.im.set_data(self.world.grid)
+            self.fig.canvas.draw_idle()
+    
+    
+    def on_key_click(self, event):
         if hasattr(event, 'inaxes') and event.inaxes is not None:
             x = round(event.xdata)
             y = round(event.ydata)
@@ -97,5 +107,5 @@ class Simulation:
 
 
 
-sim = Simulation(size_x=50, size_y=50, rules=ConwayRules(), delay=0.1)
+sim = Simulation(size_x=50, size_y=50, rules=ConwayRules(), delay=0.01)
 sim.run(steps=1000)
