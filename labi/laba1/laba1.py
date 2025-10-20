@@ -83,10 +83,10 @@ def four():
     print(f"{str(p1) + " %" if max(sm1, sm2) == sm1 else str(p2) + " %"}{" " * (96 - len(str(p1) + str(p2)))}{str(p1) + " %" if min(sm1, sm2) == sm1 else str(p2) + " %"}")
 
 
-one()
-print()
-two()
-print()
-three()
-print()
+# one()
+# print()
+# two()
+# print()
+# three()
+# print()
 four()
