@@ -72,9 +72,6 @@ def three():
         print("Файл не найден!")
 
 
-# one()
-# two()
-# three()
 
 
 
