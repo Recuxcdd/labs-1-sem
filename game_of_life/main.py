@@ -3,7 +3,7 @@ from simulation import Simulation
 
 
 if __name__ == '__main__':
-    sim = Simulation(size_x=50, size_y=50, rules=ThreeSpeciesRules(), delay=0.05, paused=True, n_species=3, random_init=True)
+    sim = Simulation(size_x=1000, size_y=1000, rules=ConwayRules(), delay=0.001, paused=True, n_species=1, random_init=True)
     sim.run()
 
 
