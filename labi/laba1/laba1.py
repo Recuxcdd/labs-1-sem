@@ -1,4 +1,7 @@
-import time, sys
+import time
+import os
+
+project_folder_dir = os.path.dirname(os.path.abspath(__file__))
 
 RED = '\u001b[41m'
 BLUE = '\u001b[44m'
@@ -50,7 +53,7 @@ def three():
 
 
 def four():
-    seq = [float(line) for line in open("sequence.txt")]
+    seq = [float(line) for line in open(os.path.join(project_folder_dir, "sequence.txt"))]
     sm1 = 0
     sm2 = 0
 
@@ -83,10 +86,10 @@ def four():
     print(f"{str(p1) + " %" if max(sm1, sm2) == sm1 else str(p2) + " %"}{" " * (96 - len(str(p1) + str(p2)))}{str(p1) + " %" if min(sm1, sm2) == sm1 else str(p2) + " %"}")
 
 
-# one()
-# print()
-# two()
-# print()
-# three()
-# print()
+one()
+print()
+two()
+print()
+three()
+print()
 four()

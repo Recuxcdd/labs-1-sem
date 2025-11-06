@@ -1,12 +1,15 @@
 from csv import reader
 from random import randint
 import pandas as pd
+import os
+
+project_folder_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 #ПОЛУЧИТЬ КОЛ-ВО КНИГ С НАЗВАНИЯМИ ДЛИННЕЕ 30 СИМВОЛОВ
 def one():
     try:
-        with open('books.csv', 'r') as csvfile:
+        with open(os.path.join(project_folder_dir, 'books.csv'), 'r') as csvfile:
             table = reader(csvfile, delimiter=';')
             cnt = 0
             for row in table:
@@ -33,7 +36,7 @@ def two():
             return 0
         
         try:
-            with open('books.csv', 'r') as csvfile:
+            with open(os.path.join(project_folder_dir, 'books.csv'), 'r') as csvfile:
                 table = reader(csvfile, delimiter=';')
                 books_found = search_author(table, author)
                 
@@ -61,9 +64,9 @@ def get_n_random_rows(df, n):
 #СОХРАНИТЬ 20 СЛУЧАНЫХ ЗАПИСЕЙ В ФАЙЛ output_3_task.txt
 def three():
     try:
-        df = pd.read_csv('books.csv', encoding='cp1251', delimiter=';')
+        df = pd.read_csv(os.path.join(project_folder_dir, 'books.csv'), encoding='cp1251', delimiter=';')
         got = get_n_random_rows(df, 20)
-        with open('output_3_task.txt', 'w') as output:
+        with open(os.path.join(project_folder_dir, 'output_3_task.txt'), 'w') as output:
             for ind in got:
                 row = df.iloc[ind]
                 output.write(f"{str(row['Автор']).replace('nan', 'Неизвестно')}. {row['Название']} - {row['Дата поступления'].split(' ')[0].split('.')[2]}\n")
@@ -80,7 +83,7 @@ def three():
 #ВЫВЕСТИ МНОЖЕСТВО ВСЕХ ТЕГОВ
 def four():
     try:
-        df = pd.read_csv('books.csv', encoding='cp1251', delimiter=';')
+        df = pd.read_csv(os.path.join(project_folder_dir, 'books.csv'), encoding='cp1251', delimiter=';')
         tags = set()
         for row in df['Жанр книги']:
             row_tags = [s.strip() for s in row.split('#')]
@@ -94,7 +97,7 @@ def four():
 #20 САМЫХ ПОПУЛЯРНЫХ КНИГ
 def five():
     try:
-        df = pd.read_csv('books.csv', encoding='cp1251', delimiter=';')
+        df = pd.read_csv(os.path.join(project_folder_dir, 'books.csv'), encoding='cp1251', delimiter=';')
         df['Кол-во выдач'] = pd.to_numeric(df['Кол-во выдач'], errors='coerce').fillna(-1)
         df = df.sort_values(by='Кол-во выдач', ascending=False)
         df_popular = df.head(20)
