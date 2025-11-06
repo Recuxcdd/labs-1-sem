@@ -16,13 +16,15 @@ def next_good_ij_and_axis(inv, item):
         for j in range(cols):
             #1 и 0 в return - оси: 0 - x, 1 - y
             if inv[i][j] == '[ ]' and j + size <= cols: #ось x
-                return i, j, 0
+                if all(inv[i][j + k] == '[ ]' for k in range(size)):
+                    return i, j, 0
             if inv[i][j] == '[ ]' and i + size <= rows: #ось y
-                return i, j, 1
+                if all(inv[i + k][j] == '[ ]' for k in range(size)):
+                    return i, j, 1
     return False
 
 
-def draw_inventory(inventory, rows, cols):
+def draw_inventory(inventory, rows, cols, items):
     inv = [['[ ]' for _ in range(cols)] for _ in range(rows)]
     #сортируем по размеру чтобы сначала точно вместить большие
     inventory_sorted = sorted(inventory, key=lambda x: items[x]['size'], reverse=True)
@@ -70,14 +72,13 @@ def backpack_problem(items, inventory_size, illness, start_value, find_all=False
         print('Нет решения')
         return
     
-    inv = [['[ ]' for _ in range(cols)] for _ in range(rows)]
     #сортируем по размеру чтобы сначала точно вместить большие
     if find_all:
         for inventory in all_inventories:
-            draw_inventory(inventory, rows, cols)
+            draw_inventory(inventory, rows, cols, items)
     else:
         best_inventory_sorted = sorted(best_inventory, key=lambda x: items[x]['size'], reverse=True)
-        draw_inventory(best_inventory_sorted, rows, cols)
+        draw_inventory(best_inventory_sorted, rows, cols, items)
         print(f'\nИтоговые очки выживания: {best_score}')   
     
 
