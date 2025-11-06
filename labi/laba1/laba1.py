@@ -50,7 +50,7 @@ def three():
 
 
 def four():
-    seq = [float(line) for line in open(r"sequence.txt")]
+    seq = [float(line) for line in open("sequence.txt")]
     sm1 = 0
     sm2 = 0
 
