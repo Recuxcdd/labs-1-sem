@@ -1,8 +1,28 @@
 import tkinter as tk
 from tkinter import PhotoImage
 import os
+import playsound3 as ps3
 from random import choice, shuffle   
 from math import gcd
+
+
+def is_valid_seed(seed):
+    try:
+        dec_seed = int(str(seed), 16)
+        if len(str(dec_seed)) >= 3 and 'x' not in seed.lower():
+            return True
+        else:
+            return False
+    except Exception:
+        return False
+        
+
+def get_dir_and_play_sound(project_folder_dir, *local_names):
+    try:
+        sound_dir = os.path.join(project_folder_dir, *local_names)
+        ps3.playsound(sound_dir, block=False)
+    except Exception:
+        pass
 
     
 class TKKeyGen:
@@ -37,14 +57,14 @@ class TKKeyGen:
         self.button.place(relx=0.5, rely=0.5, anchor='center')
         
         #надпись неправильного семени
-        self.incorrect_seed_label = tk.Label(self.root, text='Некорректное семечко', font=('Arial', 8), fg='red')
+        self.incorrect_seed_label = tk.Label(self.root, text='Некорректное семечко', font=('Arial', 8, 'bold'), fg='#fa4659')
         
         #вывод сген ключа
         self.generated_key = tk.Entry(self.root, font=('Arial', 18), justify='center', width=25)
         
         #конпка копировать с иконкой
-        project_folder_dir = os.path.dirname(os.path.abspath(__file__))
-        icon_copy_dir = os.path.join(project_folder_dir, 'images', 'icon_copy.png')
+        self.project_folder_dir = os.path.dirname(os.path.abspath(__file__))
+        icon_copy_dir = os.path.join(self.project_folder_dir, 'images', 'icon_copy.png')
         
         icon_copy = PhotoImage(file=icon_copy_dir)
         resize_coef = int(512 / (height // 2 * 0.067) * 1.5)
@@ -53,23 +73,14 @@ class TKKeyGen:
         self.copy_button.image = resized_icon_copy
         
         #надпись скопировано
-        self.copied = tk.Label(self.root, text='Скопировано', font=('Arial', 8), fg='green')
-        
+        self.copied = tk.Label(self.root, text='Скопировано', font=('Arial', 8, 'bold'), fg='#a3de83')
 
-    def is_valid_seed(self, seed):
-        try:
-            dec_seed = int(str(seed), 16)
-            if len(str(dec_seed)) >= 3 and 'x' not in seed.lower():
-                return True
-            else:
-                return False
-        except Exception:
-            return False
-        
     def generate_key(self):
+        get_dir_and_play_sound(self.project_folder_dir, 'sounds', 'button_clicked.mp3')
+        
         seed = self.seed_entry.get()
         
-        if self.is_valid_seed(seed):
+        if is_valid_seed(seed):
             dec_seed = str(int(str(seed), 16))
             key = ''
             for i in range(3):
@@ -104,16 +115,18 @@ class TKKeyGen:
             self.copy_button.place(relx=0.75, rely=0.7, anchor='center', relwidth=0.067 / self.screen_ratio[2], relheight=0.067)
     
     def get_key_to_boof(self):
+        get_dir_and_play_sound(self.project_folder_dir, 'sounds', 'copied.mp3')
+        
         key = self.key
         if key:
             self.root.clipboard_clear()
             self.root.clipboard_append(key)
             self.root.update()
             self.copied.place(relx=0.75, rely=0.76, anchor='center')
-    
-    def start(self):
+         
+    def run(self):
         self.root.mainloop()
 
 
 keygen = TKKeyGen()
-keygen.start()
+keygen.run()
